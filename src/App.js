@@ -6,7 +6,8 @@ import EditUserForm from "./forms/EditUserForm"
 const App = () => {
 
   const retrieveUsers = () => {
-    const url = "http://localhost:5000/users"
+    const url = `http://${process.env.REACT_APP_FLASK_ENDPOINT}/api/users`
+    console.log(url)
     fetch(url, {
       method: 'GET',
       headers: {
@@ -36,12 +37,13 @@ const App = () => {
   const [editingUser, setEditingUser] = useState(initialEditingUser)
 
   const addUser = (user) => {
+    const url = `http://${process.env.REACT_APP_FLASK_ENDPOINT}/api/users`
     const requestOptions = {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(user)
     };
-    fetch("http://localhost:5000/users", requestOptions)
+    fetch(url, requestOptions)
         .then((response) => {
           const locationURL = response.headers.get('Location')
           user.user_id = locationURL.substr(locationURL.lastIndexOf('/')+1)
@@ -56,7 +58,7 @@ const App = () => {
   }
 
   const updateUser = (updatedUser) => {
-    const url = `http://localhost:5000/users/${updatedUser.user_id}`
+    const url = `http://${process.env.REACT_APP_FLASK_ENDPOINT}/api/users/${updatedUser.user_id}`
     const requestOptions = {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
@@ -70,7 +72,7 @@ const App = () => {
   }
 
   const deleteUser = (user_id) => {
-    const url = `http://localhost:5000/users/${user_id}`
+    const url = `http://${process.env.REACT_APP_FLASK_ENDPOINT}/api/users/${user_id}`
     const requestOptions = {
       method: 'DELETE',
     };
