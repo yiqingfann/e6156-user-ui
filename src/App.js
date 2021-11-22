@@ -4,8 +4,8 @@ import AddUserForm from "./forms/AddUserForm"
 import EditUserForm from "./forms/EditUserForm"
 
 const App = () => {
-  // equivalant to componentDidMount()
-  useEffect(() => {
+
+  const retrieveUsers = () => {
     const url = "http://localhost:5000/users"
     fetch(url, {
       method: 'GET',
@@ -19,7 +19,10 @@ const App = () => {
     .then((response) => {
       setUsers(response)
     })
-  }, [])
+  }
+
+  // equivalant to componentDidMount()
+  useEffect(retrieveUsers, [])
 
   const initialUsers = [
     {user_id: 1, first_name: 'Frank', last_name: 'Fan', email: 'frankfan@columbia.edu'},
@@ -33,8 +36,18 @@ const App = () => {
   const [editingUser, setEditingUser] = useState(initialEditingUser)
 
   const addUser = (user) => {
-    // user.id = users.length + 1
-    setUsers([...users, user])
+    const requestOptions = {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(user)
+    };
+    fetch("http://localhost:5000/users", requestOptions)
+        .then((response) => {
+          const locationURL = response.headers.get('Location')
+          user.user_id = locationURL.substr(locationURL.lastIndexOf('/')+1)
+          setUsers([...users, user])
+        })
+    // setUsers([...users, user]) // QUESTION: if put here, table unique key error
   }
 
   const editUser = (user) => {
