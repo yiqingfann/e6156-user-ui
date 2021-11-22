@@ -1,23 +1,39 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import UserTable from "./tables/UserTable"
 import AddUserForm from "./forms/AddUserForm"
 import EditUserForm from "./forms/EditUserForm"
 
 const App = () => {
+  // equivalant to componentDidMount()
+  useEffect(() => {
+    const url = "http://localhost:5000/users"
+    fetch(url, {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json'
+      }
+    })
+    .then((response) => {
+      return response.json()
+    })
+    .then((response) => {
+      setUsers(response)
+    })
+  }, [])
+
   const initialUsers = [
-    {id: 1, name: 'Frank Fan', username: 'frankfan'},
-    {id: 2, name: 'A Zi', username: 'azi'},
-    {id: 3, name: 'Nana Mi', username: 'nanami'}
+    {user_id: 1, first_name: 'Frank', last_name: 'Fan', email: 'frankfan@columbia.edu'},
+    {user_id: 2, first_name: 'A', last_name: 'Zi', email: 'azi@bilibili.com'},
   ]
   const [users, setUsers] = useState(initialUsers)
 
   const [isEditing, setIsEditing] = useState(false)
 
-  const initialEditingUser = {id: null, name: "", username: ""}
+  const initialEditingUser = {user_id: null, first_name: "", last_name: "", email: ""}
   const [editingUser, setEditingUser] = useState(initialEditingUser)
 
   const addUser = (user) => {
-    user.id = users.length + 1
+    // user.id = users.length + 1
     setUsers([...users, user])
   }
 
@@ -27,14 +43,14 @@ const App = () => {
   }
 
   const updateUser = (updatedUser) => {
-    setUsers(users.map((user) => (user.id == updatedUser.id ? updatedUser : user)))
+    setUsers(users.map((user) => (user.user_id == updatedUser.user_id ? updatedUser : user)))
     setIsEditing(false)
   }
 
-  const deleteUser = (id) => {
+  const deleteUser = (user_id) => {
     setIsEditing(false)
     const newUsers = users.filter((user) => {
-      return user.id != id
+      return user.user_id != user_id
     })
     setUsers(newUsers)
   }

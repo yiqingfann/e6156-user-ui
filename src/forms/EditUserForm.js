@@ -12,7 +12,7 @@ const EditUserForm = (props) => {
 
   const handleFormSubmit = (event) => {
     event.preventDefault()
-    if (!user.name || !user.username) return
+    if (!user.first_name || !user.last_name || !user.email) return
     props.updateUser(user)
   }
 
@@ -22,10 +22,12 @@ const EditUserForm = (props) => {
 
   return (
     <form onSubmit={handleFormSubmit}>
-      <label>Name</label>
-      <input type="text" name="name" value={user.name} onChange={handleInputChange}/>
-      <label>Username</label>
-      <input type="text" name="username" value={user.username} onChange={handleInputChange}/>
+      <label>First Name</label>
+      <input type="text" name="first_name" value={user.first_name} onChange={handleInputChange}/>
+      <label>Last Name</label>
+      <input type="text" name="last_name" value={user.last_name} onChange={handleInputChange}/>
+      <label>Email</label>
+      <input type="text" name="email" value={user.email} onChange={handleInputChange}/>
       <button>Update</button>
       <button onClick={handleCancel} className="button muted-button">Cancel</button>
     </form>
