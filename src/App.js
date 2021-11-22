@@ -56,16 +56,32 @@ const App = () => {
   }
 
   const updateUser = (updatedUser) => {
-    setUsers(users.map((user) => (user.user_id == updatedUser.user_id ? updatedUser : user)))
-    setIsEditing(false)
+    const url = `http://localhost:5000/users/${updatedUser.user_id}`
+    const requestOptions = {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(updatedUser)
+    };
+    fetch(url, requestOptions)
+        .then((response) => {
+          setUsers(users.map((user) => (user.user_id == updatedUser.user_id ? updatedUser : user)))
+          setIsEditing(false)
+        })
   }
 
   const deleteUser = (user_id) => {
-    setIsEditing(false)
-    const newUsers = users.filter((user) => {
-      return user.user_id != user_id
-    })
-    setUsers(newUsers)
+    const url = `http://localhost:5000/users/${user_id}`
+    const requestOptions = {
+      method: 'DELETE',
+    };
+    fetch(url, requestOptions)
+        .then((response) => {
+          setIsEditing(false)
+          const newUsers = users.filter((user) => {
+            return user.user_id != user_id
+          })
+          setUsers(newUsers)
+        })
   }
 
   return (
