@@ -58,6 +58,10 @@ const App = () => {
   }
 
   const updateUser = (updatedUser) => {
+    // TODO: temp solution
+    if (updatedUser.addr_id === null) {
+      delete updatedUser.addr_id
+    }
     const url = `http://${process.env.REACT_APP_FLASK_ENDPOINT}/api/users/${updatedUser.user_id}`
     const requestOptions = {
       method: 'PUT',
